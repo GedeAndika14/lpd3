@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layar Antrian LPD Bali</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #001b44;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  /* Nomor Antrian Besar */
+  .current-number {
+    font-size: 10vw;
+    font-weight: 800;
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+    margin-bottom: 20px;
+  }
+
+  /* Info Loket */
+  .loket-info {
+    font-size: 4vw;
+    margin-bottom: 10px;
+    font-weight: 700;
+    color: #00ffff;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  }
+
+  /* Info Layanan */
+  .service-info {
+    font-size: 3.5vw;
+    color: #ff7f50;
+    text-shadow: 0 0 5px rgba(255, 127, 80, 0.5);
+  }
+</style>
+</head>
+<body>
+
+  <div class="current-number" id="currentNumber">0</div>
+  <div class="loket-info" id="currentLoket">Loket: -</div>
+  <div class="service-info" id="currentService">Layanan: -</div>
+
+<script>
+  function updateDisplay(){
+    let history = JSON.parse(localStorage.getItem("history")) || [];
+    let serving = history.find(h => h.status === "serving");
+
+    if(serving){
+      document.getElementById("currentNumber").textContent = serving.no;
+      document.getElementById("currentLoket").textContent = "Loket: " + serving.loket;
+
+      const layananMap = {
+        "U": "Layanan Umum",
+        "S": "Setoran Tunai",
+        "P": "Penarikan Tunai",
+        "R": "Pembukaan Tabungan",
+        "D": "Deposito",
+        "K": "Kredit Baru",
+        "A": "Angsuran Kredit",
+        "M": "Administrasi",
+        "I": "Konsultasi Produk"
+      };
+
+      document.getElementById("currentService").textContent = "Layanan: " + layananMap[serving.service];
+    } else {
+      document.getElementById("currentNumber").textContent = "0";
+      document.getElementById("currentLoket").textContent = "Loket: -";
+      document.getElementById("currentService").textContent = "Layanan: -";
+    }
+  }
+
+  setInterval(updateDisplay, 1000);
+  updateDisplay();
+</script>
+
+</body>
+</html>
